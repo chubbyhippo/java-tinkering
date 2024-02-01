@@ -16,6 +16,10 @@ public class ExcelUtils {
         throw new IllegalAccessException("Utility Class");
     }
 
+    public static Workbook createWorkbook() {
+        return new XSSFWorkbook();
+    }
+
     public static Workbook getWorkbook(String filepath) throws IOException {
         try (FileInputStream fis = new FileInputStream(filepath)) {
             return new XSSFWorkbook(fis);
