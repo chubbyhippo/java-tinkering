@@ -17,12 +17,9 @@ class ExcelUtilsTest {
     @Test
     @DisplayName("should throw illegal state exception when initialized")
     void shouldThrowIllegalStateExceptionWhenInitialized() throws NoSuchMethodException {
-        // Get the constructor
         var constructor = ExcelUtils.class.getDeclaredConstructor();
-        // Make it accessible
         constructor.setAccessible(true);
 
-        // Assert that exception is thrown when instance is created
         assertThatExceptionOfType(InvocationTargetException.class)
                 .isThrownBy(constructor::newInstance)
                 .withCauseInstanceOf(IllegalAccessException.class);
