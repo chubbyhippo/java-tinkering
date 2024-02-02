@@ -20,6 +20,12 @@ public class ExcelUtils {
         return new XSSFWorkbook();
     }
 
+    public static void saveWorkbook(Workbook workbook, String filepath) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(filepath)) {
+            workbook.write(fos);
+        }
+    }
+
     public static Workbook getWorkbook(String filepath) throws IOException {
         try (FileInputStream fis = new FileInputStream(filepath)) {
             return new XSSFWorkbook(fis);
@@ -48,9 +54,4 @@ public class ExcelUtils {
         cell.setCellValue(value);
     }
 
-    public static void saveWorkbook(Workbook workbook, String filepath) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(filepath)) {
-            workbook.write(fos);
-        }
-    }
 }
