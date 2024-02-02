@@ -1,7 +1,14 @@
 package org.example;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -38,6 +48,30 @@ class ExcelUtilsTest {
     void shouldCreateWorkbookAsAnInstanceOfXssfWorkbook() {
         var wb = ExcelUtils.createWorkbook();
         assertThat(wb).isInstanceOf(XSSFWorkbook.class);
+    }
+
+    @Test
+    @DisplayName("should save workbook")
+    void shouldSaveWorkbook() throws IOException {
+        var fileSystem = Jimfs.newFileSystem(Configuration.unix());
+        var xlsxPath = fileSystem.getPath("test.xlsx");
+
+        var toBeSavedWorkbook = new XSSFWorkbook();
+        Sheet sheet = toBeSavedWorkbook.createSheet("test");
+        Row row = sheet.createRow(0);
+        Cell cell = row.createCell(0);
+        cell.setCellValue("testData");
+
+        ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
+
+        try (var sheets = new XSSFWorkbook(xlsxPath.toString())) {
+            var savedSheet = sheets.getSheet("test");
+            var savedRow = savedSheet.getRow(0);
+            var savedCell = savedRow.getCell(0);
+
+            assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
+        }
+
     }
 
     @Test
