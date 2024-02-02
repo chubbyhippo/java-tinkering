@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -62,7 +63,33 @@ class ExcelUtilsTest {
 
             assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
         }
+    }
 
+    @Test
+    @DisplayName("should get workbook")
+    void shouldGetWorkbook() throws IOException {
+        var fileSystem = Jimfs.newFileSystem(Configuration.unix());
+        var xlsxPath = fileSystem.getPath("test.xlsx");
+
+        try (var toBeSavedWorkbook = new XSSFWorkbook()) {
+            var sheet = toBeSavedWorkbook.createSheet("test");
+            var row = sheet.createRow(0);
+            var cell = row.createCell(0);
+            cell.setCellValue("testData");
+
+            try (var fos = new FileOutputStream(xlsxPath.toString())) {
+                toBeSavedWorkbook.write(fos);
+            }
+
+            var savedWorkbook = ExcelUtils.getWorkbook(xlsxPath.toString());
+
+            var savedStringValue = savedWorkbook.getSheet("test")
+                    .getRow(0)
+                    .getCell(0)
+                    .getStringCellValue();
+
+            assertThat(savedStringValue).isEqualTo("testData");
+        }
     }
 
 
