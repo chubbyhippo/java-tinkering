@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +25,7 @@ public class ExcelUtils {
     }
 
     public static Workbook getWorkbook(String filepath) throws IOException {
-        try (var fis = new FileInputStream(filepath)) {
+        try (var fis = Files.newInputStream(Path.of(filepath))) {
             return new XSSFWorkbook(fis);
         }
     }
