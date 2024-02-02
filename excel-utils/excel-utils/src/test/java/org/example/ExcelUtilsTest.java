@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -23,6 +25,9 @@ class ExcelUtilsTest {
 
     @Mock
     private Workbook mockWorkBook;
+
+    @TempDir
+    private Path tempDir;
 
     @Test
     @DisplayName("should throw illegal state exception when initialized")
@@ -45,24 +50,22 @@ class ExcelUtilsTest {
     @Test
     @DisplayName("should save workbook")
     void shouldSaveWorkbook() throws IOException {
-        try (var fileSystem = Jimfs.newFileSystem()) {
-            var xlsxPath = fileSystem.getPath("test.xlsx");
+        var xlsxPath = tempDir.resolve("test.xlsx");
 
-            var toBeSavedWorkbook = new XSSFWorkbook();
-            var sheet = toBeSavedWorkbook.createSheet("test");
-            var row = sheet.createRow(0);
-            var cell = row.createCell(0);
-            cell.setCellValue("testData");
+        var toBeSavedWorkbook = new XSSFWorkbook();
+        var sheet = toBeSavedWorkbook.createSheet("test");
+        var row = sheet.createRow(0);
+        var cell = row.createCell(0);
+        cell.setCellValue("testData");
 
-            ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
+        ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
 
-            try (var sheets = new XSSFWorkbook(xlsxPath.toString())) {
-                var savedSheet = sheets.getSheet("test");
-                var savedRow = savedSheet.getRow(0);
-                var savedCell = savedRow.getCell(0);
+        try (var sheets = new XSSFWorkbook(xlsxPath.toString())) {
+            var savedSheet = sheets.getSheet("test");
+            var savedRow = savedSheet.getRow(0);
+            var savedCell = savedRow.getCell(0);
 
-                assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
-            }
+            assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
         }
     }
 
