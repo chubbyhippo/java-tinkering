@@ -1,7 +1,5 @@
 package org.example;
 
-import com.google.common.jimfs.Configuration;
-import com.google.common.jimfs.Jimfs;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.DisplayName;
@@ -72,28 +70,26 @@ class ExcelUtilsTest {
     @Test
     @DisplayName("should get workbook")
     void shouldGetWorkbook() throws IOException {
-        try (var fileSystem = Jimfs.newFileSystem(Configuration.unix())) {
-            var xlsxPath = fileSystem.getPath("test.xlsx");
+        var xlsxPath = tempDir.resolve("test.xlsx");
 
-            try (var toBeSavedWorkbook = new XSSFWorkbook()) {
-                var sheet = toBeSavedWorkbook.createSheet("test");
-                var row = sheet.createRow(0);
-                var cell = row.createCell(0);
-                cell.setCellValue("testData");
+        try (var toBeSavedWorkbook = new XSSFWorkbook()) {
+            var sheet = toBeSavedWorkbook.createSheet("test");
+            var row = sheet.createRow(0);
+            var cell = row.createCell(0);
+            cell.setCellValue("testData");
 
-                try (var fos = new FileOutputStream(xlsxPath.toString())) {
-                    toBeSavedWorkbook.write(fos);
-                }
-
-                var savedWorkbook = ExcelUtils.getWorkbook(xlsxPath.toString());
-
-                var savedStringValue = savedWorkbook.getSheet("test")
-                        .getRow(0)
-                        .getCell(0)
-                        .getStringCellValue();
-
-                assertThat(savedStringValue).isEqualTo("testData");
+            try (var fos = new FileOutputStream(xlsxPath.toString())) {
+                toBeSavedWorkbook.write(fos);
             }
+
+            var savedWorkbook = ExcelUtils.getWorkbook(xlsxPath.toString());
+
+            var savedStringValue = savedWorkbook.getSheet("test")
+                    .getRow(0)
+                    .getCell(0)
+                    .getStringCellValue();
+
+            assertThat(savedStringValue).isEqualTo("testData");
         }
     }
 
