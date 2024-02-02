@@ -45,7 +45,7 @@ class ExcelUtilsTest {
     @Test
     @DisplayName("should save workbook")
     void shouldSaveWorkbook() throws IOException {
-        try (var fileSystem = Jimfs.newFileSystem(Configuration.unix())) {
+        try (var fileSystem = Jimfs.newFileSystem()) {
             var xlsxPath = fileSystem.getPath("test.xlsx");
 
             var toBeSavedWorkbook = new XSSFWorkbook();
