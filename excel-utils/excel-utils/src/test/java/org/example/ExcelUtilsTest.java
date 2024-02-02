@@ -45,23 +45,24 @@ class ExcelUtilsTest {
     @Test
     @DisplayName("should save workbook")
     void shouldSaveWorkbook() throws IOException {
-        var fileSystem = Jimfs.newFileSystem(Configuration.unix());
-        var xlsxPath = fileSystem.getPath("test.xlsx");
+        try (var fileSystem = Jimfs.newFileSystem(Configuration.unix())) {
+            var xlsxPath = fileSystem.getPath("test.xlsx");
 
-        var toBeSavedWorkbook = new XSSFWorkbook();
-        var sheet = toBeSavedWorkbook.createSheet("test");
-        var row = sheet.createRow(0);
-        var cell = row.createCell(0);
-        cell.setCellValue("testData");
+            var toBeSavedWorkbook = new XSSFWorkbook();
+            var sheet = toBeSavedWorkbook.createSheet("test");
+            var row = sheet.createRow(0);
+            var cell = row.createCell(0);
+            cell.setCellValue("testData");
 
-        ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
+            ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
 
-        try (var sheets = new XSSFWorkbook(xlsxPath.toString())) {
-            var savedSheet = sheets.getSheet("test");
-            var savedRow = savedSheet.getRow(0);
-            var savedCell = savedRow.getCell(0);
+            try (var sheets = new XSSFWorkbook(xlsxPath.toString())) {
+                var savedSheet = sheets.getSheet("test");
+                var savedRow = savedSheet.getRow(0);
+                var savedCell = savedRow.getCell(0);
 
-            assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
+                assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
+            }
         }
     }
 
