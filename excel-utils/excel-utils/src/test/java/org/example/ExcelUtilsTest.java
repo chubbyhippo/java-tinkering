@@ -103,4 +103,16 @@ class ExcelUtilsTest {
         Mockito.verify(mockWorkBook).close();
     }
 
+    @Test
+    @DisplayName("should get sheet")
+    void shouldGetWorkbook() throws IOException {
+        try (var workbook = new XSSFWorkbook()) {
+            var sheet = workbook.createSheet("test");
+
+            var sheetFromExcelUtils = ExcelUtils.getSheet(workbook, "test");
+
+            assertThat(sheetFromExcelUtils).isEqualTo(sheet);
+        }
+    }
+
 }
