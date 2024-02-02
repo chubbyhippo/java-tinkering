@@ -1,14 +1,10 @@
 package org.example;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,16 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ExtendWith(MockitoExtension.class)
 class ExcelUtilsTest {
-
 
     @Mock
     private Workbook mockWorkBook;
@@ -58,8 +50,8 @@ class ExcelUtilsTest {
 
         var toBeSavedWorkbook = new XSSFWorkbook();
         Sheet sheet = toBeSavedWorkbook.createSheet("test");
-        Row row = sheet.createRow(0);
-        Cell cell = row.createCell(0);
+        var row = sheet.createRow(0);
+        var cell = row.createCell(0);
         cell.setCellValue("testData");
 
         ExcelUtils.saveWorkbook(toBeSavedWorkbook, xlsxPath.toString());
@@ -70,6 +62,21 @@ class ExcelUtilsTest {
             var savedCell = savedRow.getCell(0);
 
             assertThat(savedCell.getStringCellValue()).isEqualTo("testData");
+        }
+
+    }
+
+    @Test
+    @DisplayName("should get cell value")
+    void shouldGetCellValue() throws IOException {
+        try (var workbook = new XSSFWorkbook()) {
+            var sheet = workbook.createSheet("test");
+            var row = sheet.createRow(0);
+            var cell = row.createCell(0);
+            cell.setCellValue("testData");
+
+            var cellValue = ExcelUtils.getCellValue(sheet, 0, 0);
+            assertThat(cellValue).isEqualTo("testData");
         }
 
     }
