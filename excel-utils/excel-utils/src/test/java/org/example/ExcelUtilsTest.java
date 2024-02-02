@@ -65,6 +65,7 @@ class ExcelUtilsTest {
 
     }
 
+
     @Test
     @DisplayName("should get cell value")
     void shouldGetCellValue() throws IOException {
@@ -105,7 +106,7 @@ class ExcelUtilsTest {
 
     @Test
     @DisplayName("should get sheet")
-    void shouldGetWorkbook() throws IOException {
+    void shouldGetSheet() throws IOException {
         try (var workbook = new XSSFWorkbook()) {
             var sheet = workbook.createSheet("test");
             var sheetFromExcelUtils = ExcelUtils.getSheet(workbook, "test");
