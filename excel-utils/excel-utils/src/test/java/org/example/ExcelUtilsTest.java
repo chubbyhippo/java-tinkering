@@ -49,7 +49,7 @@ class ExcelUtilsTest {
         var xlsxPath = fileSystem.getPath("test.xlsx");
 
         var toBeSavedWorkbook = new XSSFWorkbook();
-        Sheet sheet = toBeSavedWorkbook.createSheet("test");
+        var sheet = toBeSavedWorkbook.createSheet("test");
         var row = sheet.createRow(0);
         var cell = row.createCell(0);
         cell.setCellValue("testData");
