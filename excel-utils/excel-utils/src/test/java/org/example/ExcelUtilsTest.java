@@ -5,6 +5,7 @@ import com.google.common.jimfs.Jimfs;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,6 +80,22 @@ class ExcelUtilsTest {
             assertThat(cellValue).isEqualTo("testData");
         }
 
+    }
+
+    @Test
+    @DisplayName("should set cell value")
+    void shouldSetCellValue() throws IOException {
+
+        try (var workbook = new XSSFWorkbook()) {
+            var sheet = workbook.createSheet("test");
+            ExcelUtils.setCellValue(sheet,0, 0, "testdata");
+
+            var stringCellValue = sheet.getRow(0)
+                    .getCell(0)
+                    .getStringCellValue();
+
+            assertThat(stringCellValue).isEqualTo("testdata");
+        }
     }
 
     @Test
