@@ -108,7 +108,6 @@ class ExcelUtilsTest {
     void shouldGetWorkbook() throws IOException {
         try (var workbook = new XSSFWorkbook()) {
             var sheet = workbook.createSheet("test");
-
             var sheetFromExcelUtils = ExcelUtils.getSheet(workbook, "test");
 
             assertThat(sheetFromExcelUtils).isEqualTo(sheet);
