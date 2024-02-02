@@ -5,8 +5,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ExcelUtils {
 
@@ -19,8 +20,8 @@ public class ExcelUtils {
     }
 
     public static void saveWorkbook(Workbook workbook, String filepath) throws IOException {
-        try (var fos = new FileOutputStream(filepath)) {
-            workbook.write(fos);
+        try (var newOutputStream = Files.newOutputStream(Path.of(filepath))) {
+            workbook.write(newOutputStream);
         }
     }
 
