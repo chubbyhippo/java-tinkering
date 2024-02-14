@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -57,4 +58,23 @@ class CsvUtilsTest {
         assertThat(rec2.get(1)).isEqualTo("20");
     }
 
+    @Test
+    @DisplayName("should write csv")
+    void shouldWriteCsv() throws IOException {
+        var tempFile = tempDir.resolve("test.csv");
+        var data = List.of(
+                new String[]{"Name", "Age", "Location"},
+                new String[]{"John", "23", "New York"},
+                new String[]{"Jane", "25", "San Francisco"}
+        );
+
+        CsvUtils.writeCsv(data, tempFile);
+        try (var reader = Files.newBufferedReader(tempFile)) {
+
+            var lines = reader.lines()
+                    .toList();
+            lines.forEach(System.out::println);
+            assertThat(lines).hasSize(3);
+        }
+    }
 }
