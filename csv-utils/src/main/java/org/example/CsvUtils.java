@@ -32,14 +32,12 @@ public class CsvUtils {
         }
     }
 
-    public static void writeCsv(List<String[]> data, Path path) throws IOException {
+    public static void writeCsv(List<List<String>> data, Path path) throws IOException {
         try (var writer = Files.newBufferedWriter(path);
              var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
-
-            for (String[] row : data) {
-                csvPrinter.printRecord((Object[]) row);
+            for (List<String> row : data) {
+                csvPrinter.printRecord(row);
             }
-            writer.flush();
         }
     }
 
