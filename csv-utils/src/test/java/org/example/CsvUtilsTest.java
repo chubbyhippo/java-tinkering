@@ -59,6 +59,36 @@ class CsvUtilsTest {
     }
 
     @Test
+    @DisplayName("should read csv with headers")
+    void shouldReadCsvWithHeaders() throws IOException {
+
+        var csv = """
+                name,age
+                foo,10
+                bar,20
+                """;
+
+        var csvPath = tempDir.resolve("test.csv");
+        Files.writeString(csvPath, csv);
+
+        var records = CsvUtils.readCsv(csvPath, "name", "age");
+
+        assertThat(records).hasSize(3);
+
+        var header = records.getFirst();
+        assertThat(header.get(0)).isEqualTo("name");
+        assertThat(header.get(1)).isEqualTo("age");
+
+        var rec1 = records.get(1);
+        assertThat(rec1.get("name")).isEqualTo("foo");
+        assertThat(rec1.get("age")).isEqualTo("10");
+
+        var rec2 = records.get(2);
+        assertThat(rec2.get("name")).isEqualTo("bar");
+        assertThat(rec2.get("age")).isEqualTo("20");
+    }
+
+    @Test
     @DisplayName("should write csv")
     void shouldWriteCsv() throws IOException {
         var tempFile = tempDir.resolve("test.csv");
