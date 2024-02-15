@@ -93,16 +93,16 @@ class CsvUtilsTest {
     void shouldWriteCsv() throws IOException {
         var tempFile = tempDir.resolve("test.csv");
         var data = List.of(
-                new String[]{"Name", "Age", "Location"},
-                new String[]{"John", "23", "New York"},
-                new String[]{"Jane", "25", "San Francisco"}
+                List.of("Name", "Age", "Location"),
+                List.of("John", "23", "New York"),
+                List.of("Jane", "25", "San Francisco")
         );
 
         CsvUtils.writeCsv(data, tempFile);
         try (var reader = Files.newBufferedReader(tempFile)) {
-
             var lines = reader.lines()
                     .toList();
+
             lines.forEach(System.out::println);
             assertThat(lines).hasSize(3);
         }
