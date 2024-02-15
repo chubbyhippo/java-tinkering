@@ -22,6 +22,16 @@ public class CsvUtils {
         }
     }
 
+    public static List<CSVRecord> readCsv(Path path, String... headers) throws IOException {
+        var csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(headers)
+                .build();
+        try (var reader = Files.newBufferedReader(path);
+             var csvParser = new CSVParser(reader, csvFormat)) {
+            return csvParser.getRecords();
+        }
+    }
+
     public static void writeCsv(List<String[]> data, Path path) throws IOException {
         try (var writer = Files.newBufferedWriter(path);
              var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
