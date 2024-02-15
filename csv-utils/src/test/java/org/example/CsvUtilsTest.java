@@ -15,6 +15,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class CsvUtilsTest {
 
+    @TempDir
+    private Path tempDir;
+
     @Test
     @DisplayName("should throw illegal state exception when initialized")
     void shouldThrowIllegalStateExceptionWhenInitialized() throws NoSuchMethodException {
@@ -25,9 +28,6 @@ class CsvUtilsTest {
                 .isThrownBy(constructor::newInstance)
                 .withCauseInstanceOf(IllegalAccessException.class);
     }
-
-    @TempDir
-    private Path tempDir;
 
     @Test
     @DisplayName("should read csv")
