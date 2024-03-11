@@ -9,9 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ExcelUtils {
-
-    private ExcelUtils() throws IllegalAccessException {
-        throw new IllegalAccessException("Utility Class");
+    private ExcelUtils() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static Workbook createWorkbook() {
