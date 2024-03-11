@@ -16,7 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class ExcelUtilsTest {
@@ -29,13 +30,13 @@ class ExcelUtilsTest {
 
     @Test
     @DisplayName("should throw illegal state exception when initialized")
-    void shouldThrowIllegalStateExceptionWhenInitialized() throws NoSuchMethodException {
-        var constructor = ExcelUtils.class.getDeclaredConstructor();
+    void shouldThrowIllegalStateExceptionWhenInitialized() {
+        var constructor = ExcelUtils.class.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
 
-        assertThatExceptionOfType(InvocationTargetException.class)
-                .isThrownBy(constructor::newInstance)
-                .withCauseInstanceOf(IllegalAccessException.class);
+        var exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
+        assertEquals(IllegalStateException.class, exception.getCause().getClass());
+        assertEquals("Utility class", exception.getCause().getMessage());
     }
 
     @Test
