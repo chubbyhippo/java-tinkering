@@ -45,7 +45,7 @@ public class ExcelUtils {
                 return cell.getStringCellValue();
             }
         }
-        return null;
+        return "";
     }
 
     public static void setCellValue(Sheet sheet, int rowNum, int colNum, String value) {
