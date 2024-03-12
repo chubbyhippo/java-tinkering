@@ -112,6 +112,18 @@ class ExcelUtilsTest {
     }
 
     @Test
+    @DisplayName("should get empty string when cell value is null")
+    void shouldGetEmptyStringWhenCellValueIsNull() throws IOException {
+
+        try (var workbook = new XSSFWorkbook()) {
+            var sheet = workbook.createSheet("test");
+
+            var cellValue = ExcelUtils.getCellValue(sheet, 0, 0);
+            assertThat(cellValue).isEmpty();
+        }
+    }
+
+    @Test
     @DisplayName("should set cell value")
     void shouldSetCellValue() throws IOException {
 
