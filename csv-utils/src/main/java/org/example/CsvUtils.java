@@ -11,10 +11,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class CsvUtils {
-    private CsvUtils() throws IllegalAccessException {
-        throw new IllegalAccessException("Utility Class");
+    private CsvUtils() {
+        throw new IllegalStateException("Utility class");
     }
-
     public static List<CSVRecord> readCsv(Path path) throws IOException {
         try (var reader = Files.newBufferedReader(path);
              var csvParser = new CSVParser(reader, CSVFormat.DEFAULT)) {
