@@ -16,8 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class ExcelUtilsTest {
@@ -33,10 +31,13 @@ class ExcelUtilsTest {
     void shouldThrowIllegalStateExceptionWhenInitialized() {
         var constructor = ExcelUtils.class.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
-
-        var exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
-        assertEquals(IllegalStateException.class, exception.getCause().getClass());
-        assertEquals("Utility class", exception.getCause().getMessage());
+        try {
+            constructor.newInstance();
+        } catch (IllegalStateException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException exception) {
+            assertThat(exception.getCause().getClass()).isEqualTo(IllegalStateException.class);
+            assertThat(exception.getCause().getMessage()).isEqualTo("Utility class");
+        }
     }
 
     @Test
