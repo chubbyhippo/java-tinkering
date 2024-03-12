@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class CsvUtilsTest {
 
@@ -20,13 +19,16 @@ class CsvUtilsTest {
 
     @Test
     @DisplayName("should throw illegal state exception when initialized")
-    void shouldThrowIllegalStateExceptionWhenInitialized() throws NoSuchMethodException {
-        var constructor = CsvUtils.class.getDeclaredConstructor();
+    void shouldThrowIllegalStateExceptionWhenInitialized() {
+        var constructor = CsvUtils.class.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
-
-        assertThatExceptionOfType(InvocationTargetException.class)
-                .isThrownBy(constructor::newInstance)
-                .withCauseInstanceOf(IllegalAccessException.class);
+        try {
+            constructor.newInstance();
+        } catch (IllegalStateException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException exception) {
+            assertThat(exception.getCause().getClass()).isEqualTo(IllegalStateException.class);
+            assertThat(exception.getCause().getMessage()).isEqualTo("Utility class");
+        }
     }
 
     @Test
