@@ -1,4 +1,4 @@
-package org.example;
+package org.github.chubbyhippo;
 
 public class ValidationUtils {
     private ValidationUtils() {
