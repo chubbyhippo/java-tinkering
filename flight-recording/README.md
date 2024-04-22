@@ -19,3 +19,9 @@ jcmd <pid> JFR.stop
 ```
 jcmd <pid> JFR.check
 ```
+# reading jfr
+https://github.com/openjdk/jmc
+```
+jmc
+```
+
