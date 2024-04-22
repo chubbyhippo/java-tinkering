@@ -15,3 +15,7 @@ jcmd <pid> JFR.start duration=60s filename=myrecording.jfr
 ```
 jcmd <pid> JFR.stop
 ```
+### check
+```
+jcmd <pid> JFR.check
+```
