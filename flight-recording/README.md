@@ -7,6 +7,10 @@ java -XX:StartFlightRecording=duration=60s,filename=myrecording.jfr
 ```
 jcmd
 ```
+### list all commands
+```
+jcmd <pid> help
+```
 ### start
 ```
 jcmd <pid> JFR.start duration=60s filename=myrecording.jfr
