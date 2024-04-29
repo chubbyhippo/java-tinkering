@@ -13,6 +13,7 @@
     <modules>
         <module>csv-utils</module>
         <module>excel-utils</module>
+        <module>sftp-utils</module>
         <module>validation-utils</module>
     </modules>
 
