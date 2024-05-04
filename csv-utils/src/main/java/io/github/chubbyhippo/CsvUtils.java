@@ -1,4 +1,4 @@
-package org.github.chubbyhippo;
+package io.github.chubbyhippo;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
