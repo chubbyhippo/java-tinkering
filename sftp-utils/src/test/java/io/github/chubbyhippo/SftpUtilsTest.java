@@ -1,4 +1,4 @@
-package org.github.chubbyhippo;
+package io.github.chubbyhippo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

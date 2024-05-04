@@ -1,4 +1,4 @@
-package org.github.chubbyhippo;
+package io.github.chubbyhippo;
 
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.session.ClientSession;
