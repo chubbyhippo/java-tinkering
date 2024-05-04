@@ -1,4 +1,4 @@
-package org.github.chubbyhippo;
+package io.github.chubbyhippo;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
