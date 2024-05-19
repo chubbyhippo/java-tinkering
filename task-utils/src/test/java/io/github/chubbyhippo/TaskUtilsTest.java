@@ -51,4 +51,30 @@ class TaskUtilsTest {
         );
     }
 
+    @Test
+    @DisplayName("should run task executor service")
+    void shouldRunTaskExecutorService() {
+
+        Runnable task = () -> {
+            try {
+                Thread.sleep(1000);
+                System.out.println("Task completed");
+                System.out.println("Current thread :" + Thread.currentThread().getName());
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        };
+        Assertions.assertAll(
+                () -> {
+                    // Testing a 2 seconds timeout
+                    assertThatNoException().isThrownBy(() -> TaskUtils.runTaskExecutor(task, 2, TimeUnit.SECONDS));
+                },
+                () -> {
+                    // Testing a half second timeout, expecting TimeoutException
+                    assertThatThrownBy(() -> TaskUtils.runTaskExecutor(task, 500, TimeUnit.MILLISECONDS))
+                            .isExactlyInstanceOf(TimeoutException.class);
+                }
+        );
+    }
+
 }
