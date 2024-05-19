@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -75,6 +77,25 @@ class TaskUtilsTest {
                             .isExactlyInstanceOf(TimeoutException.class);
                 }
         );
+    }
+
+    @Test
+    @DisplayName("should run generic task executor service")
+    void shouldRunGenericTaskExecutorService() throws TimeoutException {
+        Callable<String> task = () -> {
+            Thread.sleep(1000);
+            return "Task completed";
+        };
+
+        // Testing a 2 seconds timeout
+        assertThat(TaskUtils.runTaskExecutor(task, 2, TimeUnit.SECONDS)).isEqualTo(Optional
+                .of("Task completed"));
+
+
+        // Testing a half second timeout, expecting TimeoutException
+        assertThatThrownBy(() -> TaskUtils.runTaskExecutor(task, 500, TimeUnit.MILLISECONDS))
+                .isInstanceOf(TimeoutException.class)
+                .hasMessageContaining("Timed out");
     }
 
 }
