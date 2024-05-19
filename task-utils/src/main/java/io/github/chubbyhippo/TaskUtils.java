@@ -1,16 +1,27 @@
 package io.github.chubbyhippo;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 public class TaskUtils {
     private TaskUtils() {
         throw new IllegalStateException("Utility class");
     }
+
     public static void runCompletableFutureVoid(Runnable runnable, long timeout, TimeUnit timeUnit) throws TimeoutException {
         CompletableFuture<Void> future = CompletableFuture.runAsync(runnable);
+        executeRunnable(timeout, timeUnit, future);
+    }
+
+    public static void runTaskExecutor(Runnable runnable, long timeout, TimeUnit timeUnit) throws TimeoutException {
+
+        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+            Future<?> future = executorService.submit(runnable);
+            executeRunnable(timeout, timeUnit, future);
+        }
+
+    }
+
+    private static void executeRunnable(long timeout, TimeUnit timeUnit, Future<?> future) throws TimeoutException {
         try {
             future.get(timeout, timeUnit);
             System.out.println("Current thread :" + Thread.currentThread().getName());
