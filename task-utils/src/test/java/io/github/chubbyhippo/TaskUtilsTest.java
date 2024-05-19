@@ -1,11 +1,14 @@
 package io.github.chubbyhippo;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 class TaskUtilsTest {
 
@@ -21,6 +24,31 @@ class TaskUtilsTest {
             assertThat(exception.getCause().getClass()).isEqualTo(IllegalStateException.class);
             assertThat(exception.getCause().getMessage()).isEqualTo("Utility class");
         }
+    }
+
+    @Test
+    @DisplayName("should run completable future task")
+    void shouldRunCompletableFutureVoidCompletableFutureTask() {
+        Runnable task = () -> {
+            try {
+                Thread.sleep(1000);
+                System.out.println("Task completed");
+                System.out.println("Current thread :" + Thread.currentThread().getName());
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        };
+        Assertions.assertAll(
+                () -> {
+                    // Testing a 2 seconds timeout
+                    assertThatNoException().isThrownBy(() -> TaskUtils.runCompletableFutureVoid(task, 2, TimeUnit.SECONDS));
+                },
+                () -> {
+                    // Testing a half second timeout, expecting TimeoutException
+                    assertThatThrownBy(() -> TaskUtils.runCompletableFutureVoid(task, 500, TimeUnit.MILLISECONDS))
+                            .isExactlyInstanceOf(TimeoutException.class);
+                }
+        );
     }
 
 }
