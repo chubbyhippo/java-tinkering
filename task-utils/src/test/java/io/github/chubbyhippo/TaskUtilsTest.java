@@ -1,6 +1,5 @@
 package io.github.chubbyhippo;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TaskUtilsTest {
 
@@ -40,7 +40,7 @@ class TaskUtilsTest {
                 Thread.currentThread().interrupt();
             }
         };
-        Assertions.assertAll(
+        assertAll(
                 () -> {
                     // Testing a 2 seconds timeout
                     assertThatNoException().isThrownBy(() -> TaskUtils.runCompletableFutureVoid(task, 2, TimeUnit.SECONDS));
@@ -66,7 +66,7 @@ class TaskUtilsTest {
                 Thread.currentThread().interrupt();
             }
         };
-        Assertions.assertAll(
+        assertAll(
                 () -> {
                     // Testing a 2 seconds timeout
                     assertThatNoException().isThrownBy(() -> TaskUtils.runTaskExecutor(task, 2, TimeUnit.SECONDS));
