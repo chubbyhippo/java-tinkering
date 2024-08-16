@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JschClientTest {
 
-    private final String username = "username";
-    private final String password = "password";
+    private final String username = "foo";
+    private final String password = "pass";
     private final String host = "localhost";
     private final int port = 2222;
 
@@ -23,7 +23,7 @@ class JschClientTest {
                 .withDefaultConfigs()
                 .connect();
 
-        var remoteDir = "/test";
+        var remoteDir = "/upload";
         var filenames = jschClient.listFiles(remoteDir);
 
         assertThat(filenames).isNotEmpty();
