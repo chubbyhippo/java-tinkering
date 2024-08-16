@@ -17,10 +17,12 @@ public class SftpUtils {
     }
 
     private static ClientSession createSession(String username, String host, int port, String password) throws IOException {
-        SshClient client = SshClient.setUpDefaultClient();
-        client.start();
+        ClientSession session;
+        try (SshClient client = SshClient.setUpDefaultClient()) {
+            client.start();
 
-        ClientSession session = client.connect(username, host, port).verify().getSession();
+            session = client.connect(username, host, port).verify().getSession();
+        }
         session.addPasswordIdentity(password);
         session.auth().verify();
 
