@@ -88,6 +88,7 @@ class CsvUtilsTest {
         var rec2 = records.get(2);
         assertThat(rec2.get("name")).isEqualTo("bar");
         assertThat(rec2.get("age")).isEqualTo("20");
+
     }
 
     @Test
