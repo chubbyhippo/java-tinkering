@@ -8,9 +8,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +23,9 @@ class SftpUtilsTest {
     private static final int PORT = 22;
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+
+    @TempDir
+    private static Path tempDir;
 
     @Test
     @DisplayName("should throw illegal state exception when initialized")
@@ -43,7 +48,7 @@ class SftpUtilsTest {
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider());
         sshServer.setPasswordAuthenticator((username, password, session) -> true);
         sshServer.setSubsystemFactories(List.of(new SftpSubsystemFactory()));
-        sshServer.setFileSystemFactory(new VirtualFileSystemFactory());
+        sshServer.setFileSystemFactory(new VirtualFileSystemFactory(tempDir));
         sshServer.start();
     }
 
