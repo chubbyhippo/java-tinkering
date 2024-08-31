@@ -16,17 +16,16 @@ public class SftpUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    private static ClientSession createSession(String username, String host, int port, String password) throws IOException {
-        ClientSession session;
-        try (SshClient client = SshClient.setUpDefaultClient()) {
+    public static ClientSession createSession(String username, String host, int port, String password) throws IOException {
+        try (var client = SshClient.setUpDefaultClient()) {
             client.start();
 
-            session = client.connect(username, host, port).verify().getSession();
-        }
-        session.addPasswordIdentity(password);
-        session.auth().verify();
+            var session = client.connect(username, host, port).verify().getSession();
+            session.addPasswordIdentity(password);
+            session.auth().verify();
 
-        return session;
+            return session;
+        }
     }
 
     public static void upload(String username, String host, int port, String password, Path localFile, String remotePath) throws IOException {
