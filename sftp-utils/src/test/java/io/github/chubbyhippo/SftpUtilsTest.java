@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +43,7 @@ class SftpUtilsTest {
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider());
         sshServer.setPasswordAuthenticator((username, password, session) -> true);
         sshServer.setSubsystemFactories(List.of(new SftpSubsystemFactory()));
-        sshServer.setFileSystemFactory(new VirtualFileSystemFactory(Path.of("target/sftp-root")));
+        sshServer.setFileSystemFactory(new VirtualFileSystemFactory());
         sshServer.start();
     }
 
@@ -59,7 +58,8 @@ class SftpUtilsTest {
     @DisplayName("should return session when connecting to sftp server")
     void shouldReturnSessionWhenConnectingToSftpServer() throws IOException {
         try (var session = SftpUtils.createSession(USERNAME, "localhost", PORT, PASSWORD)) {
-            assertThat(session.isOpen()).isTrue();
+            assertThat(session.isAuthenticated()).isTrue();
+            assertThat(session.isClosed()).isTrue();
         }
     }
 
