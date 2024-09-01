@@ -3,23 +3,19 @@ package io.github.chubbyhippo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class JschClientTest {
-    @Test
-    @DisplayName("should throw illegal state exception when initialized")
-    void shouldThrowIllegalStateExceptionWhenInitialized() {
-        var constructor = JschClient.class.getDeclaredConstructors()[0];
-        constructor.setAccessible(true);
-        try {
-            constructor.newInstance();
-        } catch (IllegalStateException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException exception) {
-            assertThat(exception.getCause().getClass()).isEqualTo(IllegalStateException.class);
-            assertThat(exception.getCause().getMessage()).isEqualTo("Utility class");
-        }
-    }
 
+    private final String username = "username";
+    private final String password = "password";
+    private final String host = "localhost";
+    private final int port = 2222;
+
+
+    @Test
+    @DisplayName("should list file from sftp server")
+    void shouldListFileFromSftpServer() {
+        JschClient jschClient = JschClient.create()
+                .withCredentials(username, password, host, port);
+
+    }
 }
