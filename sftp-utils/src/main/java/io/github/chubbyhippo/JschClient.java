@@ -1,7 +1,7 @@
 package io.github.chubbyhippo;
 
-public class JcshClient {
-    private JcshClient() {
+public class JschClient {
+    private JschClient() {
         throw new IllegalStateException("Utility class");
     }
 }

@@ -7,11 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JcshClientTest {
+public class JschClientTest {
     @Test
     @DisplayName("should throw illegal state exception when initialized")
     void shouldThrowIllegalStateExceptionWhenInitialized() {
-        var constructor = JcshClient.class.getDeclaredConstructors()[0];
+        var constructor = JschClient.class.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         try {
             constructor.newInstance();
