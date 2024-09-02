@@ -1,8 +1,8 @@
 package io.github.chubbyhippo;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
+
+import java.util.List;
 
 public class JschClient {
     private String username;
@@ -10,6 +10,7 @@ public class JschClient {
     private String host;
     private int port;
     private Session session;
+    private ChannelSftp channelSftp;
 
     private JschClient() {
     }
@@ -36,4 +37,19 @@ public class JschClient {
         return this;
     }
 
+    public JschClient connect() throws JSchException {
+        session.connect();
+        channelSftp = (ChannelSftp) session.openChannel("sftp");
+        channelSftp.connect();
+        return this;
+    }
+
+    public List<String> listFiles(String remoteDir) throws SftpException {
+
+        return channelSftp.ls(remoteDir).stream()
+                .filter(l -> !l.getAttrs().isDir())
+                .map(ChannelSftp.LsEntry::getFilename)
+                .toList();
+
+    }
 }
