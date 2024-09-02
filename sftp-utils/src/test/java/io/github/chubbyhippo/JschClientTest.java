@@ -2,11 +2,10 @@ package io.github.chubbyhippo;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.Stream;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class JschClientTest {
 
@@ -26,6 +25,7 @@ class JschClientTest {
 
         var remoteDir = "/test";
         var filenames = jschClient.listFiles(remoteDir);
-        Assertions.assertThat(filenames).isNotEmpty();
+
+        assertThat(filenames).isNotEmpty();
     }
 }
