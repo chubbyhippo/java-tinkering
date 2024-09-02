@@ -4,7 +4,7 @@ import com.jcraft.jsch.*;
 
 import java.util.List;
 
-public class JschClient {
+public class JschClient implements WithCredentials, WithDefaultConfigs, Connect {
     private String username;
     private String password;
     private String host;
@@ -19,7 +19,7 @@ public class JschClient {
         return new JschClient();
     }
 
-    public JschClient withCredentials(String username, String password, String host, int port) {
+    public WithDefaultConfigs withCredentials(String username, String password, String host, int port) {
         this.username = username;
         this.password = password;
         this.host = host;
@@ -27,7 +27,7 @@ public class JschClient {
         return this;
     }
 
-    public JschClient withDefaultConfigs() throws JSchException {
+    public Connect withDefaultConfigs() throws JSchException {
         var jSch = new JSch();
         session = jSch.getSession(username, host, port);
         session.setConfig("StrictHostKeyChecking", "no");
@@ -52,4 +52,6 @@ public class JschClient {
                 .toList();
 
     }
+
 }
+
