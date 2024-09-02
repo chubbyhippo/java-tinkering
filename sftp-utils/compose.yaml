@@ -1,0 +1,8 @@
+services:
+  sftp:
+    image: atmoz/sftp
+    volumes:
+      - ./upload:/home/foo/upload
+    ports:
+      - "2222:22"
+    command: foo:pass:1001
