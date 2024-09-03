@@ -49,7 +49,6 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect 
                 .filter(l -> !l.getAttrs().isDir())
                 .map(ChannelSftp.LsEntry::getFilename)
                 .toList();
-
     }
 
 }
