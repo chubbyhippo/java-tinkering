@@ -69,4 +69,24 @@ class JSchClientTest {
         Files.delete(file);
     }
 
+    @Test
+    @DisplayName("should download file")
+    void shouldDownloadFile() throws IOException, JSchException, SftpException {
+
+        var file = tempDir.resolve("test.txt");
+        Files.write(file, "test".getBytes());
+
+        var jschClient = JSchClient.create()
+                .withCredentials(USERNAME, PASSWORD, HOST, PORT)
+                .withDefaultConfigs()
+                .connect();
+
+        var remoteDir = "/test.txt";
+
+        var inputStream = jschClient.downloadFile(remoteDir);
+        assertThat(inputStream).isNotNull();
+
+        Files.delete(file);
+    }
+
 }

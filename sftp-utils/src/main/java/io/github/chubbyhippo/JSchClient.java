@@ -2,6 +2,7 @@ package io.github.chubbyhippo;
 
 import com.jcraft.jsch.*;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect {
@@ -51,5 +52,8 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect 
                 .toList();
     }
 
+    public InputStream downloadFile(String remoteDir) throws SftpException {
+        return channelSftp.get(remoteDir);
+    }
 }
 
