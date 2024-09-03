@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class JSchClientTest {
 
@@ -118,8 +117,18 @@ class JSchClientTest {
 
     @Test
     @DisplayName("should delete remote file")
-    void shouldDeleteRemoteFile() {
+    void shouldDeleteRemoteFile() throws IOException, JSchException, SftpException {
 
-        fail("Not implemented");
+        var file = remoteDirPath.resolve("test.txt");
+        Files.write(file, "test".getBytes());
+
+        var jSchClient = JSchClient.create()
+                .withCredentials(USERNAME, PASSWORD, HOST, PORT)
+                .withDefaultConfigs()
+                .connect();
+        var remotePath = "/test.txt";
+        jSchClient.deleteFile(remotePath);
+
+        assertThat(Files.exists(file)).isFalse();
     }
 }
