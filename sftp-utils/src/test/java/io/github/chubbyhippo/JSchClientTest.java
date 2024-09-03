@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class JSchClientTest {
 
@@ -95,7 +96,7 @@ class JSchClientTest {
     @DisplayName("should upload file")
     void shouldUploadFile() throws JSchException, IOException, SftpException {
 
-        var jschClient = JSchClient.create()
+        var jSchClient = JSchClient.create()
                 .withCredentials(USERNAME, PASSWORD, HOST, PORT)
                 .withDefaultConfigs()
                 .connect();
@@ -107,11 +108,18 @@ class JSchClientTest {
         var localPath = localFilePath.toAbsolutePath().toString();
         var remotePath = "/test.txt";
 
-        jschClient.uploadFile(localPath, remotePath);
+        jSchClient.uploadFile(localPath, remotePath);
         var remoteFile = remoteDirPath.resolve("test.txt");
 
         assertThat(Files.exists(remoteFile)).isTrue();
 
         Files.delete(remoteFile);
+    }
+
+    @Test
+    @DisplayName("should delete remote file")
+    void shouldDeleteRemoteFile() {
+
+        fail("Not implemented");
     }
 }
