@@ -65,7 +65,7 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect,
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
 
     }
 }
