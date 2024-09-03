@@ -45,7 +45,6 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect 
     }
 
     public List<String> listFiles(String remoteDir) throws SftpException {
-
         return channelSftp.ls(remoteDir).stream()
                 .filter(l -> !l.getAttrs().isDir())
                 .map(ChannelSftp.LsEntry::getFilename)
