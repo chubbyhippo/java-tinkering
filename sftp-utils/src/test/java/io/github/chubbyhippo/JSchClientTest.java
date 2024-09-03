@@ -59,13 +59,13 @@ class JSchClientTest {
         var file = remoteDirPath.resolve("test.txt");
         Files.write(file, "test".getBytes());
 
-        var jschClient = JSchClient.create()
+        var jSchClient = JSchClient.create()
                 .withCredentials(USERNAME, PASSWORD, HOST, PORT)
                 .withDefaultConfigs()
                 .connect();
 
         var remoteDir = "/";
-        var filenames = jschClient.listFiles(remoteDir);
+        var filenames = jSchClient.listFiles(remoteDir);
 
         assertThat(filenames).isNotEmpty();
 
