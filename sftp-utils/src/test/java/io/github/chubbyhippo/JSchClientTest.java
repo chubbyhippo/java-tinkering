@@ -33,8 +33,6 @@ class JSchClientTest {
 
     @BeforeAll
     static void setUp() throws IOException {
-        var file = tempDir.resolve("test.txt");
-        Files.write(file, "test".getBytes());
         sshServer = SshServer.setUpDefaultServer();
         sshServer.setPort(PORT);
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider());
@@ -53,7 +51,11 @@ class JSchClientTest {
 
     @Test
     @DisplayName("should list file from sftp server")
-    void shouldListFileFromSftpServer() throws JSchException, SftpException {
+    void shouldListFileFromSftpServer() throws JSchException, SftpException, IOException {
+
+        var file = tempDir.resolve("test.txt");
+        Files.write(file, "test".getBytes());
+
         var jschClient = JSchClient.create()
                 .withCredentials(USERNAME, PASSWORD, HOST, PORT)
                 .withDefaultConfigs()
@@ -63,6 +65,8 @@ class JSchClientTest {
         var filenames = jschClient.listFiles(remoteDir);
 
         assertThat(filenames).isNotEmpty();
+
+        Files.delete(file);
     }
 
 }
