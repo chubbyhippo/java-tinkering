@@ -19,17 +19,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JschClientTest {
+class JSchClientTest {
 
     private static final int PORT = 22;
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private final String HOST = "localhost";
 
+    private static SshServer sshServer;
+
     @TempDir
     private static Path tempDir;
-
-    private static SshServer sshServer;
 
     @BeforeAll
     static void setUp() throws IOException {
@@ -54,7 +54,7 @@ class JschClientTest {
     @Test
     @DisplayName("should list file from sftp server")
     void shouldListFileFromSftpServer() throws JSchException, SftpException {
-        var jschClient = JschClient.create()
+        var jschClient = JSchClient.create()
                 .withCredentials(USERNAME, PASSWORD, HOST, PORT)
                 .withDefaultConfigs()
                 .connect();

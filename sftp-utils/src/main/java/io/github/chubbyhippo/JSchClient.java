@@ -4,7 +4,7 @@ import com.jcraft.jsch.*;
 
 import java.util.List;
 
-public class JschClient implements WithCredentials, WithDefaultConfigs, Connect {
+public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect {
     private String username;
     private String password;
     private String host;
@@ -12,11 +12,11 @@ public class JschClient implements WithCredentials, WithDefaultConfigs, Connect 
     private Session session;
     private ChannelSftp channelSftp;
 
-    private JschClient() {
+    private JSchClient() {
     }
 
-    public static JschClient create() {
-        return new JschClient();
+    public static JSchClient create() {
+        return new JSchClient();
     }
 
     public WithDefaultConfigs withCredentials(String username, String password, String host, int port) {
@@ -37,7 +37,7 @@ public class JschClient implements WithCredentials, WithDefaultConfigs, Connect 
         return this;
     }
 
-    public JschClient connect() throws JSchException {
+    public JSchClient connect() throws JSchException {
         session.connect();
         channelSftp = (ChannelSftp) session.openChannel("sftp");
         channelSftp.connect();
