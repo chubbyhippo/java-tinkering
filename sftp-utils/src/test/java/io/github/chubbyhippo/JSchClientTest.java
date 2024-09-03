@@ -6,8 +6,8 @@ import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.sftp.server.SftpSubsystemFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -21,18 +21,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JSchClientTest {
 
-    private static final int PORT = 22;
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
+    private final int PORT = 22;
+    private final String USERNAME = "username";
+    private final String PASSWORD = "password";
     private final String HOST = "localhost";
 
-    private static SshServer sshServer;
+    private SshServer sshServer;
 
     @TempDir
     private static Path tempDir;
 
-    @BeforeAll
-    static void setUp() throws IOException {
+    @BeforeEach
+    void setUp() throws IOException {
         sshServer = SshServer.setUpDefaultServer();
         sshServer.setPort(PORT);
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider());
@@ -42,8 +42,8 @@ class JSchClientTest {
         sshServer.start();
     }
 
-    @AfterAll
-    static void tearDown() throws IOException {
+    @AfterEach
+    void tearDown() throws IOException {
         if (sshServer != null && sshServer.isStarted()) {
             sshServer.stop();
         }
