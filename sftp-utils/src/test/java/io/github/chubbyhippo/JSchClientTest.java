@@ -79,14 +79,14 @@ class JSchClientTest {
         var file = remoteDirPath.resolve("test.txt");
         Files.write(file, "test".getBytes());
 
-        var jschClient = JSchClient.create()
+        var jSchClient = JSchClient.create()
                 .withCredentials(USERNAME, PASSWORD, HOST, PORT)
                 .withDefaultConfigs()
                 .connect();
 
         var remoteDir = "/test.txt";
 
-        var inputStream = jschClient.downloadFile(remoteDir);
+        var inputStream = jSchClient.downloadFile(remoteDir);
         assertThat(inputStream).isNotNull();
 
         Files.delete(file);
