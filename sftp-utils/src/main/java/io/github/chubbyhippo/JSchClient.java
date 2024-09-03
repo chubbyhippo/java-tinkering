@@ -55,5 +55,9 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect 
     public InputStream downloadFile(String remoteDir) throws SftpException {
         return channelSftp.get(remoteDir);
     }
+
+    public void uploadFile(String localPath, String remotePath) throws SftpException {
+        channelSftp.put(localPath, remotePath);
+    }
 }
 

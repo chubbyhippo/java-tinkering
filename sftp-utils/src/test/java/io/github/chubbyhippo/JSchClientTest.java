@@ -21,15 +21,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JSchClientTest {
 
-    private final int PORT = 22;
-    private final String USERNAME = "username";
-    private final String PASSWORD = "password";
-    private final String HOST = "localhost";
+    private static final int PORT = 22;
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String HOST = "localhost";
 
     private SshServer sshServer;
 
     @TempDir
-    private static Path tempDir;
+    private static Path localDirPath;
+    @TempDir
+    private static Path remoteDirPath;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -38,7 +40,7 @@ class JSchClientTest {
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider());
         sshServer.setPasswordAuthenticator((username, password, session) -> true);
         sshServer.setSubsystemFactories(List.of(new SftpSubsystemFactory()));
-        sshServer.setFileSystemFactory(new VirtualFileSystemFactory(tempDir));
+        sshServer.setFileSystemFactory(new VirtualFileSystemFactory(remoteDirPath));
         sshServer.start();
     }
 
@@ -53,7 +55,7 @@ class JSchClientTest {
     @DisplayName("should list file from sftp server")
     void shouldListFileFromSftpServer() throws JSchException, SftpException, IOException {
 
-        var file = tempDir.resolve("test.txt");
+        var file = remoteDirPath.resolve("test.txt");
         Files.write(file, "test".getBytes());
 
         var jschClient = JSchClient.create()
@@ -73,7 +75,7 @@ class JSchClientTest {
     @DisplayName("should download file")
     void shouldDownloadFile() throws IOException, JSchException, SftpException {
 
-        var file = tempDir.resolve("test.txt");
+        var file = remoteDirPath.resolve("test.txt");
         Files.write(file, "test".getBytes());
 
         var jschClient = JSchClient.create()
@@ -89,4 +91,27 @@ class JSchClientTest {
         Files.delete(file);
     }
 
+    @Test
+    @DisplayName("should upload file")
+    void shouldUploadFile() throws JSchException, IOException, SftpException {
+
+        var jschClient = JSchClient.create()
+                .withCredentials(USERNAME, PASSWORD, HOST, PORT)
+                .withDefaultConfigs()
+                .connect();
+
+        var localFilePath = localDirPath.resolve("test.txt");
+
+        Files.write(localFilePath, "test".getBytes());
+
+        var localPath = localFilePath.toAbsolutePath().toString();
+        var remotePath = "/test.txt";
+
+        jschClient.uploadFile(localPath, remotePath);
+        var remoteFile = remoteDirPath.resolve("test.txt");
+
+        assertThat(Files.exists(remoteFile)).isTrue();
+
+        Files.delete(remoteFile);
+    }
 }
