@@ -5,7 +5,7 @@ import com.jcraft.jsch.*;
 import java.io.InputStream;
 import java.util.List;
 
-public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect {
+public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect, AutoCloseable {
     private String username;
     private String password;
     private String host;
@@ -62,6 +62,11 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect 
 
     public void deleteFile(String remotePath) throws SftpException {
         channelSftp.rm(remotePath);
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }
 
