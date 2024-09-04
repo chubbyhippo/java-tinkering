@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Execution(ExecutionMode.CONCURRENT)
 class JSchClientTest {
@@ -133,5 +134,23 @@ class JSchClientTest {
         jSchClient.deleteFile(remotePath);
 
         assertThat(Files.exists(file)).isFalse();
+    }
+
+    @Test
+    @DisplayName("should close connection")
+    void shouldCloseConnection() throws IOException, JSchException {
+
+        var file = remoteDirPath.resolve("test.txt");
+        Files.write(file, "test".getBytes());
+
+        var jSchClient = JSchClient.create()
+                .withCredentials(USERNAME, PASSWORD, HOST, PORT)
+                .withDefaultConfigs()
+                .connect();
+
+        var remoteDir = "/";
+        jSchClient.close();
+        assertThatThrownBy(() -> jSchClient.listFiles(remoteDir))
+                .hasCauseInstanceOf(IOException.class);
     }
 }
