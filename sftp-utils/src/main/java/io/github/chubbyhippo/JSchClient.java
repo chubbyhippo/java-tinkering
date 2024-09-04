@@ -66,7 +66,13 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect,
 
     @Override
     public void close() {
-
+       if (channelSftp != null) {
+           channelSftp.exit();
+           channelSftp.disconnect();
+       }
+       if (session != null) {
+           session.disconnect();
+       }
     }
 }
 
