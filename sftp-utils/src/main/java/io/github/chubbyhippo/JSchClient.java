@@ -5,7 +5,7 @@ import com.jcraft.jsch.*;
 import java.io.InputStream;
 import java.util.List;
 
-public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect, AutoCloseable {
+public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect {
     private String username;
     private String password;
     private String host;
@@ -64,15 +64,14 @@ public class JSchClient implements WithCredentials, WithDefaultConfigs, Connect,
         channelSftp.rm(remotePath);
     }
 
-    @Override
     public void close() {
-       if (channelSftp != null) {
-           channelSftp.exit();
-           channelSftp.disconnect();
-       }
-       if (session != null) {
-           session.disconnect();
-       }
+        if (channelSftp != null) {
+            channelSftp.exit();
+            channelSftp.disconnect();
+        }
+        if (session != null) {
+            session.disconnect();
+        }
     }
 }
 
