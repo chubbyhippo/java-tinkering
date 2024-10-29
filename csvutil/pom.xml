@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>csv-utils</artifactId>
+    <artifactId>csvutil</artifactId>
 
     <properties>
         <commons-csv.version>1.10.0</commons-csv.version>

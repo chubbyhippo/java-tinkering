@@ -11,7 +11,7 @@
     <name>java-tinkering</name>
 
     <modules>
-        <module>csv-utils</module>
+        <module>csvutil</module>
         <module>excel-utils</module>
         <module>sftp-utils</module>
         <module>task-utils</module>
