@@ -12,7 +12,7 @@
 
     <modules>
         <module>csvutil</module>
-        <module>excel-utils</module>
+        <module>excelutil</module>
         <module>sftp-utils</module>
         <module>task-utils</module>
     </modules>
